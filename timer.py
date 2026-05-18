@@ -1,7 +1,7 @@
 """
 LED Matrix Flashing Countdown Timer
-Counts down from a configured duration, then flashes the LED matrix.
-Config: set COUNTDOWN_MINUTES below.
+Kitchen timer style: counts down, then flashes until a button is pressed.
+Button: GP15 (connect to GND when pressed)
 """
 
 import machine
@@ -9,14 +9,10 @@ import max7219
 import time
 
 # Countdown config 
-COUNTDOWN_MINUTES = 1    # how long to count down (minutes)
-COUNTDOWN_SECONDS = 0    # additional seconds
+COUNTDOWN_MINUTES = 10
+COUNTDOWN_SECONDS = 0
 
-# Flash config 
-FLASH_ON_MS  = 500
-FLASH_OFF_MS = 500
-
-# Display setup 
+# Hardware setup 
 spi = machine.SPI(0,
                   sck=machine.Pin(6),
                   mosi=machine.Pin(7))
@@ -24,36 +20,39 @@ cs      = machine.Pin(5, machine.Pin.OUT)
 display = max7219.Matrix8x8(spi, cs, 4)
 display.brightness(15)
 
+button = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP)
+# Button reads LOW when pressed (pulled to GND)
+
 def flash_alarm():
-    TIMEOUT_MINUTES = 10   # alarm stops after this long
+    """Flash at 1 Hz until the button is pressed."""
+    print("Timer done! Press button to stop.")
+    half_period_ms = 500
 
-    start_ms = time.ticks_ms()
     while True:
-        elapsed_ms      = time.ticks_diff(time.ticks_ms(), start_ms)
-        elapsed_minutes = elapsed_ms // 60000
-
-        if elapsed_minutes >= TIMEOUT_MINUTES:
+        # Check button each half-cycle
+        if button.value() == 0:
             display.fill(0)
             display.show()
+            print("Stopped.")
             break
-
-        if elapsed_minutes < 2:
-            half_period_ms = 500
-        elif elapsed_minutes < 4:
-            half_period_ms = 250
-        else:
-            half_period_ms = 125
 
         display.fill(1)
         display.show()
         time.sleep_ms(half_period_ms)
+
+        if button.value() == 0:
+            display.fill(0)
+            display.show()
+            print("Stopped.")
+            break
+
         display.fill(0)
         display.show()
         time.sleep_ms(half_period_ms)
 
-# Main countdown 
+# Main countdown
 total_seconds = COUNTDOWN_MINUTES * 60 + COUNTDOWN_SECONDS
-print("Countdown started: {:02d}:{:02d}".format(COUNTDOWN_MINUTES, COUNTDOWN_SECONDS))
+print("Timer started: {:02d}:{:02d}".format(COUNTDOWN_MINUTES, COUNTDOWN_SECONDS))
 
 start_ms = time.ticks_ms()
 
