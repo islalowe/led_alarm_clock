@@ -70,10 +70,10 @@ def get_sunrise_start_pct():
 
 
 # ─────────────────────────────────────────────
-# BUTTON
+# BUTTONS
 # ─────────────────────────────────────────────
 
-class Button:
+class Buttons:
 
     def __init__(self, pin_num):
 
@@ -569,11 +569,11 @@ def main():
     )
 
     # Buttons
-    btn_up        = Button(2)
-    btn_down      = Button(3)
-    btn_set       = Button(4)
-    btn_mode      = Button(5)
-    btn_flashstop = Button(FLASH_STOP_PIN)
+    btn_up        = Buttons(2)
+    btn_down      = Buttons(3)
+    btn_set       = Buttons(4)
+    btn_mode      = Buttons(5)
+    btn_flashstop = Buttons(FLASH_STOP_PIN)
 
     # # Clock
     # clock = Clock(
