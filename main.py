@@ -3,7 +3,7 @@ import utime
 from displayv2 import DisplayManager
 import max7219
 import timekeeping
-
+from bt_subsystem import HC06Bluetooth, ALERT_ALARM, ALERT_TIMER, ALERT_SUNRISE, ALERT_CLEAR  #BLUETOOTH
 # USER CONFIGURATION
 
 START_HOUR   = 6
@@ -564,6 +564,7 @@ def main():
     display = DisplayManager()
 
     beeper = Beeper(BEEPER_PIN)
+    bt = HC06Bluetooth() #BLUETOOTH
 
     matrix = LEDMatrix(
         MATRIX_SPI_ID,
@@ -682,6 +683,7 @@ def main():
 
             sunrise_manual_off = True
             alarm_cancelled    = True
+            bt.send_alert(ALERT_CLEAR) # BLUETOOTH
 
         # ════════════════════════════════════
         # ALARM MODE
@@ -752,6 +754,7 @@ def main():
                     )
 
                     sunrise_triggered = True
+                    bt.send_alert(ALERT_SUNRISE) #BLUETOOTH
 
             # ── ALARM TRIGGER ───────────────
 
@@ -771,6 +774,7 @@ def main():
                 matrix.start_flash()
 
                 beeper.beep(5000)
+                bt.send_alert(ALERT_ALARM) #BLUETOOTH
 
             # ── DISPLAY ─────────────────────
 
@@ -847,6 +851,7 @@ def main():
                 matrix.start_flash()
 
                 timer_state = TIMER_STOP
+                bt.send_alert(ALERT_TIMER) # BLUETOOTH
 
             # ── DISPLAY ─────────────────────
 
