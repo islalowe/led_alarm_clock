@@ -4,7 +4,7 @@
 ### Feature 1: LED Flashing When Alarm Goes Off  
 When the alarm triggers, an **8×32 LED matrix** flashes to provide a high-intensity visual cue.
 - Flashing frequency starts at **1 Hz** and doubles every 2 minutes if not deactivated, reaching a maximum urgency cap at **4 Hz**
-- LED brightness is auto-adjusted via an **LDR sensor** — full brightness (100%) in bright rooms, reduced (70%) in dark rooms to reduce excessive glare
+- LED brightness is auto-adjusted via an **LDR sensor**. It employs full brightness (100%) in bright rooms, and reduced (70%) in dark rooms to reduce excessive glare
 
 ### Feature 2: Display Screen 
 A **1602 LCD** shows the current time, alarm time, and alarm status (ON / OFF).
