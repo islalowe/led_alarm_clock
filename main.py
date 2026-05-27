@@ -859,3 +859,50 @@ if __name__ == "__main__":
 
     main()
 
+
+
+
+
+
+
+#TODO - THIS IS MAIN THAT JUST IMPORTS OTHER FILES
+# # main.py
+# from config      import *
+# from button      import Button
+# from beeper      import Beeper
+# from led_matrix  import LEDMatrix
+# from clock       import Clock
+# from timer       import CountdownTimer
+# from displayv2   import DisplayManager
+# import timekeeping
+
+# MODE_ALARM = "ALARM"
+# MODE_TIMER = "TIMER"
+# ALARM_ON   = "ON"
+# ALARM_OFF  = "OFF"
+# ALARM_SET  = "SET"
+# TIMER_RUN  = "RUN"
+# TIMER_STOP = "STOP"
+# TIMER_SET  = "SET"
+
+# def main():
+#     display = DisplayManager()
+#     beeper  = Beeper(BEEPER_PIN)
+#     matrix  = LEDMatrix(MATRIX_SPI_ID, MATRIX_SCK, MATRIX_MOSI, MATRIX_CS, MATRIX_NUM)
+
+#     btn_up        = Button(2)
+#     btn_down      = Button(3)
+#     btn_set       = Button(4)
+#     btn_mode      = Button(5)
+#     btn_flashstop = Button(FLASH_STOP_PIN)
+
+#     if timekeeping.connect_wifi(WIFI_SSID, WIFI_PASSWORD):
+#         try:
+#             timekeeping.sync_time_ntp()
+#         except OSError:
+#             pass
+
+#     h, m = timekeeping.get_time()
+#     clock = Clock(h, m, 0)
+
+#     # ... rest of the loop unchanged
