@@ -70,10 +70,10 @@ def get_sunrise_start_pct():
 
 
 # ─────────────────────────────────────────────
-# BUTTONS
+# BUTTON
 # ─────────────────────────────────────────────
 
-class Buttons:
+class Button:
 
     def __init__(self, pin_num):
 
@@ -185,6 +185,7 @@ class LEDMatrix:
         self._sunrise_start_ms  = 0
         self._sunrise_dur_ms    = 0
         self._sunrise_start_pct = SUNRISE_START_PCT
+        self._ramp_dur_ms       = 0  # ADD THIS
 
         # Flash state
         self._flash_active   = False
@@ -217,6 +218,10 @@ class LEDMatrix:
 
         # Read LDR to set starting brightness
         self._sunrise_start_pct = get_sunrise_start_pct()
+        if self._sunrise_start_pct >= 20:
+            self._ramp_dur_ms = self._sunrise_dur_ms // 2
+        else:
+            self._ramp_dur_ms = self._sunrise_dur_ms
 
         print("Sunrise start brightness:", self._sunrise_start_pct, "%")
 
@@ -285,7 +290,7 @@ class LEDMatrix:
                 self._sunrise_start_ms
             )
 
-            progress = elapsed / self._sunrise_dur_ms
+            progress = elapsed / self._ramp_dur_ms
 
             if progress >= 1.0:
 
@@ -569,11 +574,11 @@ def main():
     )
 
     # Buttons
-    btn_up        = Buttons(2)
-    btn_down      = Buttons(3)
-    btn_set       = Buttons(4)
-    btn_mode      = Buttons(5)
-    btn_flashstop = Buttons(FLASH_STOP_PIN)
+    btn_up        = Button(2)
+    btn_down      = Button(3)
+    btn_set       = Button(4)
+    btn_mode      = Button(5)
+    btn_flashstop = Button(FLASH_STOP_PIN)
 
     # # Clock
     # clock = Clock(
@@ -853,3 +858,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
