@@ -579,6 +579,7 @@ def main():
     btn_set       = Button(4)
     btn_mode      = Button(5)
     btn_flashstop = Button(FLASH_STOP_PIN)
+    btn_edit      = Button(6)   # Blue — dedicated clock edit
 
     # # Clock
     # clock = Clock(
