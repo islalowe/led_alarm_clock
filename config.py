@@ -1,12 +1,24 @@
-# This file handles constants like pin numbers, alarm time, brightness thresholds, and flash escalation intervals. 
+# config.py
+DEBOUNCE_MS = 120
+BEEPER_PIN  = 15
 
-ALARM_HOUR   = 7      # this needs to be changeable by user
-ALARM_MINUTE = 30     # this needs to be changeable by user
-FLASH_COUNT  = 20
-FLASH_ON_MS  = 500
-FLASH_OFF_MS = 500
+MATRIX_SPI_ID = 0
+MATRIX_SCK    = 18
+MATRIX_MOSI   = 19
+MATRIX_CS     = 17
+MATRIX_NUM    = 4
 
-# Pins
-SPI_SCK  = 6
-SPI_MOSI = 7
-CS_PIN   = 5
+SUNRISE_LEAD_MINUTES = 10
+SUNRISE_START_PCT    = 2
+
+LDR_PIN       = 26
+LDR_THRESHOLD = 30000
+
+FLASH_STOP_PIN     = 6
+FLASH_TIMEOUT_MINS = 10
+
+ALARM_HOUR   = 7
+ALARM_MINUTE = 0
+
+WIFI_SSID     = "your_network"
+WIFI_PASSWORD = "your_password"
