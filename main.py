@@ -17,6 +17,9 @@ DEBOUNCE_MS = 120
 
 BEEPER_PIN = 15
 
+WIFI_SSID     = "Your iPhone"
+WIFI_PASSWORD = "yourpassword"
+
 # LED MATRIX
 
 MATRIX_SPI_ID = 0
@@ -597,6 +600,9 @@ def main():
             pass  # fall through to RTC default (00:00:00)
     h, m = timekeeping.get_time()
     clock = Clock(h, m, 0)
+    clock.setup_mode = False
+    clock.running    = True
+    clock._last_tick = utime.ticks_ms()
 
     # Alarm
     alarm_hour  = ALARM_HOUR
@@ -621,6 +627,16 @@ def main():
 
     while True:
 
+        if btn_edit.pressed():
+            if clock.running:
+                clock.pause()
+                display.clock_edit_screen(clock.hour, clock.minute, clock.second, clock.edit_field)
+            elif clock.paused:
+                done = clock.setup_next_field()
+                if done:
+                    clock.resume()
+                else:
+                    display.clock_edit_screen(clock.hour, clock.minute, clock.second, clock.edit_field)
         # ── MODE SWITCH ─────────────────────
 
         if btn_mode.pressed():
@@ -851,6 +867,13 @@ def main():
                 timer_state
             )
 
+        if clock.paused:
+            if btn_up.pressed():
+                clock.setup_increment()
+                display.clock_edit_screen(clock.hour, clock.minute, clock.second, clock.edit_field)
+            if btn_down.pressed():
+                clock.setup_decrement()
+                display.clock_edit_screen(clock.hour, clock.minute, clock.second, clock.edit_field)
         utime.sleep_ms(10)
 
 
