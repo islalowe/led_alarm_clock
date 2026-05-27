@@ -1,18 +1,19 @@
 # led_alarm_clock
 ### A deaf-friendly alarm clock built on a Pico board that uses visual feedback to wake up the user.
 
-### Feature 1: LED Flashing When Alarm Goes Off 
-An 8x32 LED matrix flashes when the alarm is triggered to provide a high-intensity visual cue. 
-The flashing frequency begins at 1 Hz and doubles every 2 minutes if the alarm is not deactivated, reaching a maximum urgency cap of 4 Hz. 
-LED brightness during flashing alarm mode is adjusted using an LDR sensor to maintain strong visibility (100% brightness) in bright environments while reducing excessive glare (70% brightness) in dark rooms. 
- 
+### Feature 1: LED Flashing When Alarm Goes Off  
+When the alarm triggers, an **8×32 LED matrix** flashes to provide a high-intensity visual cue.
+- Flashing frequency starts at **1 Hz** and doubles every 2 minutes if not deactivated, reaching a maximum urgency cap at **4 Hz**
+- LED brightness is auto-adjusted via an **LDR sensor** — full brightness (100%) in bright rooms, reduced (70%) in dark rooms to reduce excessive glare
+
 ### Feature 2: Display Screen 
-A 1602 LCD screen display shows the current time, alarm time, and whether the alarm is ON or OFF. 
+A **1602 LCD** shows the current time, alarm time, and alarm status (ON / OFF).
  
 ### Feature 3: Button Controls  
-Used to set current time. 
-Used to set alarm time. 
-Used to stop the alarm once triggered.  
+Three buttons handle all interaction:
+- Set the current time
+- Set the alarm time
+- Stop the alarm once triggered
  
 ### Feature 4: On and Off System Alarm System  
 Turns the alarm system ON and OFF. There is Clock Mode with just the time display and Alarm Mode where the user can set and activate an alarm clock. 
@@ -27,5 +28,7 @@ An LDR (Light Dependent Resistor) sensor placed on the top/front of the device d
 - In brighter environments, the LED output begins at 20% brightness and increases at twice the rate, still reaching 100% brightness by the alarm time to remain clearly visible to the user. 
 
 ### Libraries used:
-- lcd_api.py and pico_i2c_lcd.py: community library files for driving an I2C LCD. From T-Display / dhylands repo on GitHub.
-- matrix library: MAX72XX
+| File | Purpose | Source |
+|------|---------|--------|
+| `lcd_api.py` / `pico_i2c_lcd.py` | I2C LCD driver | [dhylands/micropython-i2c-lcd](https://github.com/dhylands/micropython-i2c-lcd) |
+| `max7219.py` | LED matrix driver | MAX72XX community lib |
