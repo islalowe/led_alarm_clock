@@ -20,7 +20,7 @@ A Manual Switch is used to physically control the power state and toggle between
  
 ### Feature 5: A Sunrise Feature 
 For the sunrise alarm, the 8x32 LED matrix slowly increases in brightness over a span of 10 minutes to gradually wake the user in a way that simulates a natural sunrise. 
-The sunrise sequence begins exactly 10 minutes before the set alarm time, increasing linearly to 100% brightness by the alarm time. 
+The sunrise sequence begins exactly 10 minutes before the set alarm time, starting from 10% and increasing linearly to 100% brightness by the alarm time. 
 Once the alarm time is reached, the system transitions from sunrise mode into the full flashing alarm mode. 
 An LDR (Light Dependent Resistor) sensor placed on the top/front of the device detects ambient room lighting and adjusts brightness levels automatically. 
 - In low-light conditions, the sunrise feature begins at 10% brightness and increases gradually over 10 minutes until reaching 100% brightness at the alarm time to prevent excessive glare. 
