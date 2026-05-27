@@ -2,6 +2,7 @@ from machine import Pin, PWM, SPI, ADC
 import utime
 from displayv2 import DisplayManager
 import max7219
+import timekeeping
 
 # USER CONFIGURATION
 
@@ -574,12 +575,22 @@ def main():
     btn_mode      = Button(5)
     btn_flashstop = Button(FLASH_STOP_PIN)
 
-    # Clock
-    clock = Clock(
-        START_HOUR,
-        START_MINUTE,
-        START_SECOND
-    )
+    # # Clock
+    # clock = Clock(
+    #     START_HOUR,
+    #     START_MINUTE,
+    #     START_SECOND
+    # )
+    # CLOCK:
+  
+
+    if timekeeping.connect_wifi(WIFI_SSID, WIFI_PASSWORD):
+        try:
+            timekeeping.sync_time_ntp()
+        except OSError:
+            pass  # fall through to RTC default (00:00:00)
+    h, m = timekeeping.get_time()
+    clock = Clock(h, m, 0)
 
     # Alarm
     alarm_hour  = ALARM_HOUR
