@@ -1,72 +1,53 @@
-"""
-LED Matrix Flashing Countdown Timer
-Kitchen timer style: counts down, then flashes until a button is pressed.
-Button: GP15 (connect to GND when pressed)
-"""
+import utime
 
-import machine
-import max7219
-import time
+class CountdownTimer:
+    def __init__(self):
+        self.set_minutes  = 0
+        self.set_seconds  = 0
+        self.remaining_ms = 0
+        self.running  = False
+        self.finished = False
+        self._last_tick = 0
 
-# Countdown config 
-COUNTDOWN_MINUTES = 10
-COUNTDOWN_SECONDS = 0
+    def set_time(self, minutes, seconds):
+        self.set_minutes  = minutes % 60
+        self.set_seconds  = seconds % 60
+        self.remaining_ms = (self.set_minutes * 60 + self.set_seconds) * 1000
+        self.running  = False
+        self.finished = False
 
-# Hardware setup 
-spi = machine.SPI(0,
-                  sck=machine.Pin(6),
-                  mosi=machine.Pin(7))
-cs      = machine.Pin(5, machine.Pin.OUT)
-display = max7219.Matrix8x8(spi, cs, 4)
-display.brightness(15)
+    def start(self):
+        if self.remaining_ms > 0:
+            self.running    = True
+            self.finished   = False
+            self._last_tick = utime.ticks_ms()
 
-button = machine.Pin(15, machine.Pin.IN, machine.Pin.PULL_UP)
-# Button reads LOW when pressed (pulled to GND)
+    def stop(self):
+        self.running = False
 
-def flash_alarm():
-    """Flash at 1 Hz until the button is pressed."""
-    print("Timer done! Press button to stop.")
-    half_period_ms = 500
+    def reset(self):
+        self.remaining_ms = (self.set_minutes * 60 + self.set_seconds) * 1000
+        self.running  = False
+        self.finished = False
 
-    while True:
-        # Check button each half-cycle
-        if button.value() == 0:
-            display.fill(0)
-            display.show()
-            print("Stopped.")
-            break
+    def tick(self):
+        if not self.running:
+            return False
+        now  = utime.ticks_ms()
+        diff = utime.ticks_diff(now, self._last_tick)
+        if diff >= 100:
+            self._last_tick    = utime.ticks_add(self._last_tick, 100)
+            self.remaining_ms -= 100
+            if self.remaining_ms <= 0:
+                self.remaining_ms = 0
+                self.running  = False
+                self.finished = True
+                return True
+        return False
 
-        display.fill(1)
-        display.show()
-        time.sleep_ms(half_period_ms)
+    def display_str(self):
+        total_s = self.remaining_ms // 1000
+        return "{:02d}:{:02d}".format(total_s // 60, total_s % 60)
 
-        if button.value() == 0:
-            display.fill(0)
-            display.show()
-            print("Stopped.")
-            break
-
-        display.fill(0)
-        display.show()
-        time.sleep_ms(half_period_ms)
-
-# Main countdown
-total_seconds = COUNTDOWN_MINUTES * 60 + COUNTDOWN_SECONDS
-print("Timer started: {:02d}:{:02d}".format(COUNTDOWN_MINUTES, COUNTDOWN_SECONDS))
-
-start_ms = time.ticks_ms()
-
-while True:
-    elapsed_ms      = time.ticks_diff(time.ticks_ms(), start_ms)
-    elapsed_seconds = elapsed_ms // 1000
-    remaining       = total_seconds - elapsed_seconds
-
-    if remaining <= 0:
-        print("Countdown complete! Flashing display.")
-        flash_alarm()
-        break
-
-    mins = remaining // 60
-    secs = remaining % 60
-    print("Time remaining: {:02d}:{:02d}".format(mins, secs), end="\r")
-    time.sleep_ms(500)
+    def set_str(self):
+        return "{:02d}:{:02d}".format(self.set_minutes, self.set_seconds)
