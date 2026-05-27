@@ -20,5 +20,5 @@ FLASH_TIMEOUT_MINS = 10
 ALARM_HOUR   = 7
 ALARM_MINUTE = 0
 
-WIFI_SSID     = "your_network"
-WIFI_PASSWORD = "your_password"
+WIFI_SSID     = "Your iPhone"
+WIFI_PASSWORD = "yourpassword"
